@@ -4,9 +4,9 @@
 
 Es el framework que aparece en la card del portafolio y representa un SaaS moderno. App Router + API routes permite tener backend y frontend en el mismo repo, ideal para un PoC autocontenido.
 
-## ¿Por qué Prisma + SQLite?
+## ¿Por qué Prisma + PostgreSQL?
 
-Prisma demuestra modelado relacional y ORM. SQLite elimina fricción de setup local (sin Docker). El schema está preparado para PostgreSQL: cambiar `provider` y `DATABASE_URL` lo lleva a producción. Es honesto y pragmático.
+Prisma demuestra modelado relacional y ORM. PostgreSQL (vía Neon serverless en Vercel) permite un deploy público real con datos persistentes, doble-booking seguro y transacciones. En local se puede seguir usando SQLite si se cambia el provider en `schema.prisma`, pero el deploy oficial usa PostgreSQL.
 
 ## ¿Por qué Socket.io?
 

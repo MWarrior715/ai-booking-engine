@@ -17,8 +17,8 @@ Este proyecto demuestra **cómo construir un SaaS de reservas AI-First** de punt
 
 - **Framework:** Next.js 14 (App Router) + React + TypeScript
 - **Estilos:** TailwindCSS
-- **ORM:** Prisma (schema preparado para PostgreSQL; PoC corre con SQLite para portabilidad)
-- **Base de datos:** SQLite local (PostgreSQL en ROADMAP)
+- **ORM:** Prisma
+- **Base de datos:** PostgreSQL (Neon serverless en Vercel; SQLite opcional para local)
 - **Tiempo real:** Socket.io
 - **Motor de IA:** API OpenAI-compatible enchufable
 
@@ -42,7 +42,7 @@ Abre el navegador, selecciona un tipo de negocio, un servicio, una fecha y reser
 
 | Variable | Descripción | Default |
 |---|---|---|
-| `DATABASE_URL` | URL de base de datos (SQLite para el PoC) | `file:./prisma/dev.db` |
+| `DATABASE_URL` | URL de base de datos PostgreSQL | `postgresql://...` |
 | `OPENAI_BASE_URL` | Endpoint OpenAI-compatible del motor de IA | `http://localhost:11434/v1` |
 | `OPENAI_API_KEY` | API key (placeholder en motor local) | `local-dev-key` |
 | `LLM_MODEL` | Modelo generativo | `qwen2.5:7b-instruct` |
