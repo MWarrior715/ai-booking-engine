@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ensureSeed } from '@/lib/prisma';
 import { generateSlots } from '@/lib/slots';
 
 export async function GET(req: NextRequest) {
+  await ensureSeed();
   const serviceId = req.nextUrl.searchParams.get('serviceId');
   const date = req.nextUrl.searchParams.get('date');
 

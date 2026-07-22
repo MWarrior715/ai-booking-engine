@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { ensureSeed, prisma } from '@/lib/prisma';
 import { chatSuggestion } from '@/lib/ai';
 
 export async function POST(req: NextRequest) {
   try {
+    await ensureSeed();
     const { venueId, message } = await req.json();
 
     if (!venueId || !message) {

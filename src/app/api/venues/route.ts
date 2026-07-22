@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { ensureSeed, prisma } from '@/lib/prisma';
 
 export async function GET() {
+  await ensureSeed();
   const venues = await prisma.venue.findMany({
     orderBy: { name: 'asc' },
   });

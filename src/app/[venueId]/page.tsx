@@ -39,8 +39,8 @@ export default function VenuePage() {
           socket.emit('join-venue', v.id);
           socket.on('booking:created', () => {
             // Refrescar slots si alguien más reserva.
-            setSlots((prev) =
-              prev.map((s) => ({ ...s, available: s.available && true })));
+            setSlots((prev) =>
+              prev.map((s: Slot) => ({ ...s, available: s.available && true })));
           });
         }
       });
@@ -78,14 +78,14 @@ export default function VenuePage() {
           customerName: data.name,
           customerEmail: data.email || undefined,
           customerPhone: data.phone || undefined,
-          venueId: venue.id,
+          venueId: venue?.id,
         }),
       });
 
       if (res.ok) {
         setBooking({ status: 'success', message: 'Reserva confirmada ✅' });
-        setSlots((prev) =
-          prev.map((s) =>
+        setSlots((prev) =>
+          prev.map((s: Slot) =>
             s.startAt === selectedSlot.startAt ? { ...s, available: false } : s,
           ),
         );

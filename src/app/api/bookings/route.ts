@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ensureSeed } from '@/lib/prisma';
 import { bookSlot } from '@/lib/slots';
 
 export async function POST(req: NextRequest) {
   try {
+    await ensureSeed();
     const body = await req.json();
     const { serviceId, startAt, customerName, customerEmail, customerPhone, notes, venueId } = body;
 

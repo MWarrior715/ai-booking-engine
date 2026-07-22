@@ -49,7 +49,7 @@ export default function Home() {
       )}
 
       <footer className="text-center text-sm text-slate-500 pt-8">
-        PoC funcional local · SQLite para portabilidad · Schema listo para PostgreSQL
+        Deploy en Vercel · SQLite serverless para la demo · Schema listo para PostgreSQL
       </footer>
     </div>
   );
