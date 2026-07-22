@@ -1,14 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "prisma generate && DATABASE_URL='file:./prisma/dev.db' prisma db push --accept-data-loss && DATABASE_URL='file:./prisma/dev.db' next build",
-  "installCommand": "npm install",
-  "env": {
-    "DATABASE_URL": "file:/tmp/dev.db"
-  },
-  "functions": {
-    "src/app/api/**/*.ts": {
-      "includeFiles": "prisma/dev.db"
-    }
-  }
+  "buildCommand": "prisma generate && prisma db push --accept-data-loss && next build",
+  "installCommand": "npm install"
 }
