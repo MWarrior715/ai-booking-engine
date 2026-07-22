@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Booking Engine
 
-## Getting Started
+> Motor de reservas multi-rubro con disponibilidad en tiempo real, conflictos bloqueados y asistente conversacional. Un PoC que demuestra la arquitectura de un SaaS de reservas completo.
 
-First, run the development server:
+Este proyecto demuestra **cómo construir un SaaS de reservas AI-First** de punta a punta: modelo de datos de disponibilidad, generación de slots, prevención de doble-booking, confirmaciones en tiempo real y un asistente conversacional que sugiere horarios.
+
+## ¿Qué demuestra? (10 min con un CTO)
+
+- Modelo de datos relacional para venues, servicios, reglas de disponibilidad y reservas.
+- Generación automática de slots desde reglas de horario.
+- Prevención de doble-booking vía restricción única en base de datos.
+- UI adaptada por rubro (restaurante, gym, spa, salón, consultorio, coworking).
+- Confirmaciones en tiempo real con Socket.io.
+- Asistente de reservas impulsado por un Motor de IA Local/Cloud.
+
+## Stack
+
+- **Framework:** Next.js 14 (App Router) + React + TypeScript
+- **Estilos:** TailwindCSS
+- **ORM:** Prisma (schema preparado para PostgreSQL; PoC corre con SQLite para portabilidad)
+- **Base de datos:** SQLite local (PostgreSQL en ROADMAP)
+- **Tiempo real:** Socket.io
+- **Motor de IA:** API OpenAI-compatible enchufable
+
+## Inicio rápido
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/MWarrior715/ai-booking-engine
+cd ai-booking-engine
+npm install
+
+cp .env.example .env              # configura tu motor de IA (local o cloud)
+npx prisma db push --schema=prisma/schema.prisma
+npx ts-node prisma/seed.ts         # carga 6 venues de distintos rubros
+
+npm run dev                       # levanta Next.js + Socket.io en http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre el navegador, selecciona un tipo de negocio, un servicio, una fecha y reserva un slot.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuración
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Descripción | Default |
+|---|---|---|
+| `DATABASE_URL` | URL de base de datos (SQLite para el PoC) | `file:./prisma/dev.db` |
+| `OPENAI_BASE_URL` | Endpoint OpenAI-compatible del motor de IA | `http://localhost:11434/v1` |
+| `OPENAI_API_KEY` | API key (placeholder en motor local) | `local-dev-key` |
+| `LLM_MODEL` | Modelo generativo | `qwen2.5:7b-instruct` |
+| `PORT` | Puerto del servidor | `3000` |
 
-## Learn More
+## Estructura
 
-To learn more about Next.js, take a look at the following resources:
+```
+ai-booking-engine/
+├── prisma/
+│   ├── schema.prisma       # Venue, Service, AvailabilityRule, Booking
+│   └── seed.ts             # venues multi-rubro
+├── server.ts               # servidor custom: Next.js + Socket.io
+├── src/
+│   ├── app/
+│   │   ├── page.tsx        # selector de rubro
+│   │   ├── [venueId]/      # UI de reservas
+│   │   └── api/            # REST endpoints
+│   ├── components/         # VenueSelector, SlotGrid, BookingForm, ChatAssistant
+│   ├── lib/
+│   │   ├── prisma.ts       # PrismaClient
+│   │   ├── slots.ts        # generación de slots + conflictos
+│   │   ├── ai.ts           # wrapper del motor LLM
+│   │   └── socket.ts       # cliente Socket.io
+│   └── types/
+└── README.md · ARCHITECTURE.md · DECISIONS.md · ROADMAP.md · CHANGELOG.md · LICENSE
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ARCHITECTURE.md](ARCHITECTURE.md) — diagrama y capas.
+- [DECISIONS.md](DECISIONS.md) — por qué Next.js, Prisma+SQLite, Socket.io, etc.
+- [ROADMAP.md](ROADMAP.md) — PostgreSQL, pagos, notificaciones, deploy.
+- [CHANGELOG.md](CHANGELOG.md)
 
-## Deploy on Vercel
+## Licencia
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](LICENSE).

@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Venue {
+  id          String             @id @default(cuid())
+  name        String
+  slug        String             @unique
+  industry    String // restaurant | gym | spa | salon | clinic | coworking
+  description String?
+  createdAt   DateTime           @default(now())
+  services    Service[]
+  rules       AvailabilityRule[]
+}
+
+model Service {
+  id          String    @id @default(cuid())
+  venueId     String
+  name        String
+  durationMin Int       @default(60)
+  capacity    Int       @default(1)
+  priceCents  Int? // opcional, para SaaS futuro
+  createdAt   DateTime  @default(now())
+  venue       Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+}
+
+model AvailabilityRule {
+  id        String  @id @default(cuid())
+  venueId   String
+  serviceId String? // si es null, aplica a todos los servicios del venue
+  dayOfWeek Int     // 0 = domingo, 6 = sábado
+  startTime String  // "09:00"
+  endTime   String  // "18:00"
+  venue     Venue   @relation(fields: [venueId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  serviceId     String
+  startAt       DateTime
+  customerName  String
+  customerEmail String?
+  customerPhone String?
+  status        String   @default("confirmed") // confirmed | cancelled | no_show
+  notes         String?
+  createdAt     DateTime @default(now())
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, startAt])
+  @@index([serviceId, startAt])
+}
