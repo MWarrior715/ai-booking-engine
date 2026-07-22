@@ -22,6 +22,6 @@ Manejar zonas horarias correctamente en un PoC agrega complejidad sin aportar a 
 
 ## Mago-compliance
 
-- Motor LLM vía API OpenAI-compatible, nunca `ollama`/`GLM` en el código público.
+- Motor LLM vía API OpenAI-compatible; el código público no acopla a ningún proveedor concreto.
 - `.env` y bases de datos locales gitignored.
 - README y docs hablan de "Motor de IA Local/Cloud".
